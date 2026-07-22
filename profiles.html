@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profiller — Elara</title>
+<style>
+  :root {
+    --bg:      #F9F8F6;
+    --surface: #FFFFFF;
+    --text:    #171613;
+    --muted:   #8C8880;
+    --accent:  #7A5C4E;
+    --rule:    #E0DBD4;
+    --serif:   Didot, "Bodoni MT", "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+    --sans:    "Helvetica Neue", Helvetica, Arial, system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg:      #0C0B09;
+      --surface: #131210;
+      --text:    #F0EDE7;
+      --muted:   #6A6560;
+      --accent:  #A8806E;
+      --rule:    #252320;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg:      #F9F8F6;
+    --surface: #FFFFFF;
+    --text:    #171613;
+    --muted:   #8C8880;
+    --accent:  #7A5C4E;
+    --rule:    #E0DBD4;
+  }
+  :root[data-theme="dark"] {
+    --bg:      #0C0B09;
+    --surface: #131210;
+    --text:    #F0EDE7;
+    --muted:   #6A6560;
+    --accent:  #A8806E;
+    --rule:    #252320;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s, color 0.3s;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 clamp(24px, 5vw, 80px);
+  }
+
+  /* Nav */
+  nav {
+    padding: 36px 0 32px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .logo {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    align-items: baseline;
+  }
+  .nav-links a, .theme-btn {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .theme-btn:hover { color: var(--text); }
+  .nav-links a.active { color: var(--text); }
+
+  hr { border: none; border-top: 0.5px solid var(--rule); }
+
+  /* Page header */
+  .page-header {
+    padding: 72px 0 60px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .page-header h1 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .page-header p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    max-width: 280px;
+    text-align: right;
+    line-height: 1.7;
+  }
+  @media (max-width: 540px) {
+    .page-header p { text-align: left; }
+  }
+
+  /* Filter bar */
+  .filter-bar {
+    padding: 24px 0 48px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 7px 16px;
+    border: 0.5px solid var(--rule);
+    border-radius: 0;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .filter-btn:hover { color: var(--text); border-color: var(--muted); }
+  .filter-btn.on {
+    color: var(--bg);
+    background: var(--text);
+    border-color: var(--text);
+  }
+
+  /* Profile grid */
+  .profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  @media (max-width: 800px) { .profiles-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .profiles-grid { grid-template-columns: 1fr; } }
+
+  /* Profile card */
+  .profile-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--surface);
+  }
+  .profile-card:hover .card-overlay { opacity: 1; }
+  .profile-card:hover .portrait-block { transform: scale(1.03); }
+
+  /* Abstract portrait */
+  .portrait-block {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    position: relative;
+    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    overflow: hidden;
+  }
+  .portrait-fill {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 28px;
+  }
+  .portrait-initial {
+    font-family: var(--serif);
+    font-size: 5rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.12);
+    line-height: 1;
+    user-select: none;
+  }
+  /* Subtle gradient overlay on portrait */
+  .portrait-block::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Hover overlay */
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .overlay-btn {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #F0EDE7;
+    padding: 11px 28px;
+    border: 0.5px solid rgba(240,237,231,0.5);
+    transition: border-color 0.2s;
+  }
+  .overlay-btn:hover { border-color: #F0EDE7; }
+
+  /* Card info */
+  .card-info {
+    padding: 20px 0 28px;
+    border-bottom: 0.5px solid var(--rule);
+  }
+  .card-name {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+  .card-meta {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 14px;
+  }
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 4px 10px;
+    border: 0.5px solid var(--rule);
+  }
+
+  /* Profile palettes */
+  .pal-a { background: linear-gradient(145deg, #2C2826 0%, #4A3B35 100%); }
+  .pal-b { background: linear-gradient(145deg, #1E2530 0%, #2D3A4A 100%); }
+  .pal-c { background: linear-gradient(145deg, #252520 0%, #3A3A2E 100%); }
+  .pal-d { background: linear-gradient(145deg, #2A2028 0%, #3D2E3A 100%); }
+  .pal-e { background: linear-gradient(145deg, #201E1C 0%, #332E2A 100%); }
+  .pal-f { background: linear-gradient(145deg, #1C2420 0%, #2C3830 100%); }
+
+  /* Count */
+  .result-count {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    padding: 0 0 32px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 40px 0 48px;
+    margin-top: 80px;
+    border-top: 0.5px solid var(--rule);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-note { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <a href="index.html" class="logo">Elara</a>
+    <ul class="nav-links">
+      <li><a href="profiles.html" class="active">Profiller</a></li>
+      <li><a href="index.html#contact">İletişim</a></li>
+      <li><button class="theme-btn" onclick="toggleTheme()">◐</button></li>
+    </ul>
+  </nav>
+</div>
+
+<div class="wrap">
+  <hr>
+
+  <div class="page-header">
+    <h1>Kadromuz</h1>
+    <p>Her profil özenle seçilmiş; eğitimli, zarif ve tamamen güvenilir.</p>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn on" data-filter="all">Tümü</button>
+    <button class="filter-btn" data-filter="istanbul">İstanbul</button>
+    <button class="filter-btn" data-filter="ankara">Ankara</button>
+    <button class="filter-btn" data-filter="izmir">İzmir</button>
+    <button class="filter-btn" data-filter="travel">Seyahat</button>
+    <button class="filter-btn" data-filter="vip">VIP</button>
+  </div>
+
+  <p class="result-count" id="count">12 profil</p>
+
+  <div class="profiles-grid" id="grid">
+
+    <div class="profile-card" data-tags="istanbul vip travel">
+      <div class="portrait-block pal-a">
+        <div class="portrait-fill"><span class="portrait-initial">S</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=1" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Sofia</p>
+        <p class="card-meta">27 · İstanbul · İngilizce, Türkçe</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Sosyal</span>
+          <span class="tag">Seyahat</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="ankara istanbul">
+      <div class="portrait-block pal-b">
+        <div class="portrait-fill"><span class="portrait-initial">A</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=2" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Alara</p>
+        <p class="card-meta">24 · Ankara · Türkçe, Fransızca</p>
+        <div class="card-tags">
+          <span class="tag">Sosyal</span>
+          <span class="tag">Kurumsal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="izmir travel vip">
+      <div class="portrait-block pal-c">
+        <div class="portrait-fill"><span class="portrait-initial">N</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=3" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Neva</p>
+        <p class="card-meta">29 · İzmir · Türkçe, İngilizce, İtalyanca</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Seyahat</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="istanbul travel vip">
+      <div class="portrait-block pal-d">
+        <div class="portrait-fill"><span class="portrait-initial">E</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=4" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Elif</p>
+        <p class="card-meta">26 · İstanbul · Türkçe, Almanca</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Sosyal</span>
+          <span class="tag">Seyahat</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="ankara">
+      <div class="portrait-block pal-e">
+        <div class="portrait-fill"><span class="portrait-initial">M</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=5" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Mira</p>
+        <p class="card-meta">31 · Ankara · Türkçe, İngilizce</p>
+        <div class="card-tags">
+          <span class="tag">Kurumsal</span>
+          <span class="tag">Sosyal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="istanbul vip">
+      <div class="portrait-block pal-f">
+        <div class="portrait-fill"><span class="portrait-initial">L</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=6" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Lara</p>
+        <p class="card-meta">23 · İstanbul · Türkçe, Rusça, İngilizce</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Özel Akşam</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="izmir istanbul travel">
+      <div class="portrait-block pal-b">
+        <div class="portrait-fill"><span class="portrait-initial">D</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=7" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Derin</p>
+        <p class="card-meta">28 · İzmir · Türkçe, İspanyolca</p>
+        <div class="card-tags">
+          <span class="tag">Seyahat</span>
+          <span class="tag">Sosyal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="istanbul vip travel">
+      <div class="portrait-block pal-a">
+        <div class="portrait-fill"><span class="portrait-initial">Z</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=8" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Zeynep</p>
+        <p class="card-meta">25 · İstanbul · Türkçe, Arapça, İngilizce</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Kurumsal</span>
+          <span class="tag">Seyahat</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="ankara travel">
+      <div class="portrait-block pal-c">
+        <div class="portrait-fill"><span class="portrait-initial">B</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=9" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Berin</p>
+        <p class="card-meta">30 · Ankara · Türkçe, İngilizce</p>
+        <div class="card-tags">
+          <span class="tag">Seyahat</span>
+          <span class="tag">Sosyal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="istanbul vip">
+      <div class="portrait-block pal-d">
+        <div class="portrait-fill"><span class="portrait-initial">C</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=10" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Ceren</p>
+        <p class="card-meta">27 · İstanbul · Türkçe, Fransızca, İngilizce</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Özel Akşam</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="izmir travel vip">
+      <div class="portrait-block pal-e">
+        <div class="portrait-fill"><span class="portrait-initial">Y</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=11" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Yıldız</p>
+        <p class="card-meta">32 · İzmir · Türkçe, İngilizce, Japonca</p>
+        <div class="card-tags">
+          <span class="tag">VIP</span>
+          <span class="tag">Seyahat</span>
+          <span class="tag">Kurumsal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card" data-tags="istanbul ankara">
+      <div class="portrait-block pal-f">
+        <div class="portrait-fill"><span class="portrait-initial">R</span></div>
+      </div>
+      <div class="card-overlay">
+        <a href="profile.html?id=12" class="overlay-btn">Profili Gör</a>
+      </div>
+      <div class="card-info">
+        <p class="card-name">Rüya</p>
+        <p class="card-meta">22 · İstanbul · Türkçe, Rusça</p>
+        <div class="card-tags">
+          <span class="tag">Sosyal</span>
+          <span class="tag">Özel Akşam</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <footer>
+    <a href="index.html" class="footer-logo">Elara</a>
+    <span class="footer-note">© 2026 &nbsp;·&nbsp; Tüm profiller doğrulanmıştır &nbsp;·&nbsp; Gizlilik güvencesi</span>
+  </footer>
+
+</div>
+
+<script>
+  const root = document.documentElement;
+  let theme = localStorage.getItem('theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  root.setAttribute('data-theme', theme);
+
+  function toggleTheme() {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }
+
+  // Filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.profile-card');
+  const countEl = document.getElementById('count');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('on'));
+      btn.classList.add('on');
+      const f = btn.dataset.filter;
+      let visible = 0;
+      cards.forEach(card => {
+        const tags = card.dataset.tags || '';
+        const show = f === 'all' || tags.includes(f);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      countEl.textContent = visible + ' profil';
+    });
+  });
+</script>
+</body>
+</html>

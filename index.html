@@ -53,7 +53,6 @@
     padding: 0 clamp(24px, 5vw, 80px);
   }
 
-  /* ── Nav ── */
   nav {
     padding: 36px 0 32px;
     display: flex;
@@ -84,7 +83,6 @@
 
   hr { border: none; border-top: 0.5px solid var(--rule); }
 
-  /* ── Page header ── */
   .page-header {
     padding: 72px 0 56px;
     display: flex;
@@ -109,7 +107,6 @@
   }
   @media (max-width: 540px) { .page-header p { text-align: left; } }
 
-  /* ── Filter bar ── */
   .filter-bar {
     padding: 20px 0 44px;
     display: flex;
@@ -133,7 +130,6 @@
     border-color: var(--text);
   }
 
-  /* ── Count ── */
   .result-count {
     font-size: 0.7rem;
     color: var(--muted);
@@ -141,7 +137,6 @@
     padding-bottom: 28px;
   }
 
-  /* ── Grid ── */
   .profiles-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -150,7 +145,7 @@
   @media (max-width: 800px) { .profiles-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 480px) { .profiles-grid { grid-template-columns: 1fr; } }
 
-  /* ── Card ── */
+  /* Card */
   .profile-card {
     position: relative;
     overflow: hidden;
@@ -158,42 +153,33 @@
     background: var(--surface);
   }
   .profile-card:hover .card-overlay { opacity: 1; }
-  .profile-card:hover .portrait-block { transform: scale(1.03); }
+  .profile-card:hover .portrait-wrap { transform: scale(1.03); }
 
-  .portrait-block {
+  .portrait-wrap {
     width: 100%;
     aspect-ratio: 3 / 4;
     position: relative;
-    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     overflow: hidden;
+    transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
-  .portrait-fill {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: flex-end;
-    padding: 28px;
+  .portrait-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
-  .portrait-initial {
-    font-family: var(--serif);
-    font-size: 5rem;
-    font-weight: 300;
-    color: rgba(255,255,255,0.1);
-    line-height: 1;
-    user-select: none;
-  }
-  .portrait-block::after {
+  /* bottom vignette over canvas */
+  .portrait-wrap::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 55%);
+    background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 55%);
     pointer-events: none;
   }
 
   .card-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.58);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,7 +192,7 @@
     text-transform: uppercase;
     color: #F0EDE7;
     padding: 11px 28px;
-    border: 0.5px solid rgba(240,237,231,0.5);
+    border: 0.5px solid rgba(240,237,231,0.45);
     transition: border-color 0.2s;
   }
   .overlay-btn:hover { border-color: #F0EDE7; }
@@ -227,11 +213,7 @@
     letter-spacing: 0.06em;
     margin-bottom: 14px;
   }
-  .card-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
   .tag {
     font-size: 0.6rem;
     letter-spacing: 0.12em;
@@ -241,15 +223,6 @@
     border: 0.5px solid var(--rule);
   }
 
-  /* Palettes */
-  .pal-a { background: linear-gradient(145deg, #2C2826, #4A3B35); }
-  .pal-b { background: linear-gradient(145deg, #1E2530, #2D3A4A); }
-  .pal-c { background: linear-gradient(145deg, #252520, #3A3A2E); }
-  .pal-d { background: linear-gradient(145deg, #2A2028, #3D2E3A); }
-  .pal-e { background: linear-gradient(145deg, #201E1C, #332E2A); }
-  .pal-f { background: linear-gradient(145deg, #1C2420, #2C3830); }
-
-  /* ── Footer ── */
   footer {
     padding: 40px 0 52px;
     margin-top: 72px;
@@ -274,11 +247,7 @@
     color: var(--rule);
     font-style: italic;
   }
-  .footer-links {
-    display: flex;
-    gap: 28px;
-    list-style: none;
-  }
+  .footer-links { display: flex; gap: 28px; list-style: none; }
   .footer-links a {
     font-size: 0.65rem;
     letter-spacing: 0.14em;
@@ -323,198 +292,150 @@
   <div class="profiles-grid" id="grid">
 
     <div class="profile-card" data-tags="istanbul vip travel">
-      <div class="portrait-block pal-a">
-        <div class="portrait-fill"><span class="portrait-initial">S</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="1" data-hue="18"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Sofia</p>
         <p class="card-meta">27 · İstanbul · İngilizce, Türkçe</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Sosyal</span><span class="tag">Seyahat</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Sosyal</span><span class="tag">Seyahat</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="ankara istanbul">
-      <div class="portrait-block pal-b">
-        <div class="portrait-fill"><span class="portrait-initial">A</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="2" data-hue="210"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Alara</p>
         <p class="card-meta">24 · Ankara · Türkçe, Fransızca</p>
-        <div class="card-tags">
-          <span class="tag">Sosyal</span><span class="tag">Kurumsal</span>
-        </div>
+        <div class="card-tags"><span class="tag">Sosyal</span><span class="tag">Kurumsal</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="izmir travel vip">
-      <div class="portrait-block pal-c">
-        <div class="portrait-fill"><span class="portrait-initial">N</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="3" data-hue="160"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Neva</p>
         <p class="card-meta">29 · İzmir · Türkçe, İngilizce, İtalyanca</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Seyahat</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Seyahat</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="istanbul travel vip">
-      <div class="portrait-block pal-d">
-        <div class="portrait-fill"><span class="portrait-initial">E</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="4" data-hue="280"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Elif</p>
         <p class="card-meta">26 · İstanbul · Türkçe, Almanca</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Sosyal</span><span class="tag">Seyahat</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Sosyal</span><span class="tag">Seyahat</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="ankara">
-      <div class="portrait-block pal-e">
-        <div class="portrait-fill"><span class="portrait-initial">M</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="5" data-hue="340"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Mira</p>
         <p class="card-meta">31 · Ankara · Türkçe, İngilizce</p>
-        <div class="card-tags">
-          <span class="tag">Kurumsal</span><span class="tag">Sosyal</span>
-        </div>
+        <div class="card-tags"><span class="tag">Kurumsal</span><span class="tag">Sosyal</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="istanbul vip">
-      <div class="portrait-block pal-f">
-        <div class="portrait-fill"><span class="portrait-initial">L</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="6" data-hue="40"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Lara</p>
         <p class="card-meta">23 · İstanbul · Türkçe, Rusça, İngilizce</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Özel Akşam</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Özel Akşam</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="izmir istanbul travel">
-      <div class="portrait-block pal-b">
-        <div class="portrait-fill"><span class="portrait-initial">D</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="7" data-hue="190"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Derin</p>
         <p class="card-meta">28 · İzmir · Türkçe, İspanyolca</p>
-        <div class="card-tags">
-          <span class="tag">Seyahat</span><span class="tag">Sosyal</span>
-        </div>
+        <div class="card-tags"><span class="tag">Seyahat</span><span class="tag">Sosyal</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="istanbul vip travel">
-      <div class="portrait-block pal-a">
-        <div class="portrait-fill"><span class="portrait-initial">Z</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="8" data-hue="55"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Zeynep</p>
         <p class="card-meta">25 · İstanbul · Türkçe, Arapça, İngilizce</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Kurumsal</span><span class="tag">Seyahat</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Kurumsal</span><span class="tag">Seyahat</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="ankara travel">
-      <div class="portrait-block pal-c">
-        <div class="portrait-fill"><span class="portrait-initial">B</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="9" data-hue="240"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Berin</p>
         <p class="card-meta">30 · Ankara · Türkçe, İngilizce</p>
-        <div class="card-tags">
-          <span class="tag">Seyahat</span><span class="tag">Sosyal</span>
-        </div>
+        <div class="card-tags"><span class="tag">Seyahat</span><span class="tag">Sosyal</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="istanbul vip">
-      <div class="portrait-block pal-d">
-        <div class="portrait-fill"><span class="portrait-initial">C</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="10" data-hue="320"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Ceren</p>
         <p class="card-meta">27 · İstanbul · Türkçe, Fransızca, İngilizce</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Özel Akşam</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Özel Akşam</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="izmir travel vip">
-      <div class="portrait-block pal-e">
-        <div class="portrait-fill"><span class="portrait-initial">Y</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="11" data-hue="140"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Yıldız</p>
         <p class="card-meta">32 · İzmir · Türkçe, İngilizce, Japonca</p>
-        <div class="card-tags">
-          <span class="tag">VIP</span><span class="tag">Seyahat</span><span class="tag">Kurumsal</span>
-        </div>
+        <div class="card-tags"><span class="tag">VIP</span><span class="tag">Seyahat</span><span class="tag">Kurumsal</span></div>
       </div>
     </div>
 
     <div class="profile-card" data-tags="istanbul ankara">
-      <div class="portrait-block pal-f">
-        <div class="portrait-fill"><span class="portrait-initial">R</span></div>
+      <div class="portrait-wrap">
+        <canvas class="portrait-canvas" data-seed="12" data-hue="0"></canvas>
       </div>
-      <a href="profile.html" class="card-overlay">
-        <span class="overlay-btn">Profili Gör</span>
-      </a>
+      <a href="profile.html" class="card-overlay"><span class="overlay-btn">Profili Gör</span></a>
       <div class="card-info">
         <p class="card-name">Rüya</p>
         <p class="card-meta">22 · İstanbul · Türkçe, Rusça</p>
-        <div class="card-tags">
-          <span class="tag">Sosyal</span><span class="tag">Özel Akşam</span>
-        </div>
+        <div class="card-tags"><span class="tag">Sosyal</span><span class="tag">Özel Akşam</span></div>
       </div>
     </div>
 
-  </div><!-- /grid -->
+  </div>
 
   <footer id="contact">
     <div class="footer-left">
@@ -527,39 +448,177 @@
       <li><a href="#">© 2026</a></li>
     </ul>
   </footer>
-
 </div>
 
 <script>
-  const root = document.documentElement;
-  let theme = localStorage.getItem('theme') ||
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+/* ── Theme ── */
+const root = document.documentElement;
+let theme = localStorage.getItem('theme') ||
+  (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+root.setAttribute('data-theme', theme);
+function toggleTheme() {
+  theme = theme === 'dark' ? 'light' : 'dark';
   root.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+  drawAll();
+}
 
-  function toggleTheme() {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+/* ── Seeded pseudo-random ── */
+function seededRand(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+/* ── Draw portrait ── */
+function drawPortrait(canvas) {
+  const wrap = canvas.parentElement;
+  const W = wrap.offsetWidth;
+  const H = wrap.offsetHeight;
+  if (!W || !H) return;
+
+  canvas.width  = W * devicePixelRatio;
+  canvas.height = H * devicePixelRatio;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const seed = parseInt(canvas.dataset.seed);
+  const hue  = parseInt(canvas.dataset.hue);
+  const r    = seededRand(seed * 137);
+  const isDark = root.getAttribute('data-theme') === 'dark' ||
+    (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  /* Background */
+  const bgL = isDark ? '6%' : '10%';
+  const bg = ctx.createLinearGradient(0, 0, W * 0.6, H);
+  bg.addColorStop(0, `hsl(${hue}, 18%, ${bgL})`);
+  bg.addColorStop(1, `hsl(${(hue + 30) % 360}, 14%, ${isDark ? '14%' : '18%'})`);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  /* Soft ambient glow behind figure */
+  const glowX = W * (0.38 + r() * 0.24);
+  const glowY = H * (0.28 + r() * 0.08);
+  const glow = ctx.createRadialGradient(glowX, glowY, 0, glowX, glowY, W * 0.55);
+  glow.addColorStop(0, `hsla(${hue}, 40%, 55%, 0.18)`);
+  glow.addColorStop(1, 'hsla(0,0%,0%,0)');
+  ctx.fillStyle = glow;
+  ctx.fillRect(0, 0, W, H);
+
+  /* Figure silhouette */
+  const cx = W * (0.42 + r() * 0.16);
+  const headR = W * (0.18 + r() * 0.04);
+  const headY = H * (0.26 + r() * 0.04);
+
+  // neck + shoulders path
+  ctx.beginPath();
+  const neckW = headR * 0.38;
+  const shoulderW = W * (0.52 + r() * 0.1);
+  const shoulderY = H * 0.72;
+  const neckTop = headY + headR * 0.82;
+
+  ctx.moveTo(cx - shoulderW / 2, H + 2);
+  // left shoulder curve
+  ctx.bezierCurveTo(
+    cx - shoulderW / 2, shoulderY,
+    cx - neckW * 2.2,   shoulderY - H * 0.06,
+    cx - neckW,         neckTop
+  );
+  // left neck to head
+  ctx.lineTo(cx - neckW, headY + headR * 0.3);
+  // head arc
+  ctx.arc(cx, headY, headR, Math.PI * 0.9, Math.PI * 0.1, false);
+  // right neck
+  ctx.lineTo(cx + neckW, neckTop);
+  // right shoulder
+  ctx.bezierCurveTo(
+    cx + neckW * 2.2,   shoulderY - H * 0.06,
+    cx + shoulderW / 2, shoulderY,
+    cx + shoulderW / 2, H + 2
+  );
+  ctx.closePath();
+
+  const figGrad = ctx.createLinearGradient(cx - headR, headY - headR, cx + headR, shoulderY);
+  const skinL = 28 + r() * 18;
+  figGrad.addColorStop(0, `hsl(${hue + 10}, 18%, ${skinL + 10}%)`);
+  figGrad.addColorStop(0.5, `hsl(${hue + 5}, 14%, ${skinL}%)`);
+  figGrad.addColorStop(1, `hsl(${hue}, 10%, ${skinL - 6}%)`);
+  ctx.fillStyle = figGrad;
+  ctx.fill();
+
+  /* Subtle hair mass */
+  ctx.beginPath();
+  ctx.arc(cx, headY - headR * 0.08, headR * 1.02, Math.PI * 1.0, Math.PI * 2.0);
+  ctx.closePath();
+  const hairGrad = ctx.createRadialGradient(cx, headY - headR * 0.5, 0, cx, headY - headR * 0.5, headR * 1.1);
+  hairGrad.addColorStop(0, `hsl(${hue}, 12%, ${isDark ? '18%' : '14%'})`);
+  hairGrad.addColorStop(1, `hsl(${hue}, 8%, ${isDark ? '8%' : '6%'})`);
+  ctx.fillStyle = hairGrad;
+  ctx.fill();
+
+  /* Fine detail lines — subtle fabric folds / jewelry */
+  ctx.strokeStyle = `hsla(${hue}, 30%, 80%, 0.07)`;
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < 4; i++) {
+    const lx = cx - shoulderW * 0.3 + r() * shoulderW * 0.6;
+    const ly = shoulderY + r() * (H - shoulderY) * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(lx, ly);
+    ctx.bezierCurveTo(lx + r() * 40 - 20, ly - 30, lx + r() * 40 - 20, ly + 30, lx + r() * 20 - 10, ly + 60);
+    ctx.stroke();
   }
 
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.profile-card');
-  const countEl = document.getElementById('count');
+  /* Single accent dot — like a small jewel */
+  const dotX = cx + (r() - 0.5) * headR * 0.6;
+  const dotY = neckTop + headR * 0.2;
+  const dotGrad = ctx.createRadialGradient(dotX, dotY, 0, dotX, dotY, 3);
+  dotGrad.addColorStop(0, `hsla(${hue + 30}, 60%, 80%, 0.7)`);
+  dotGrad.addColorStop(1, 'hsla(0,0%,0%,0)');
+  ctx.fillStyle = dotGrad;
+  ctx.beginPath();
+  ctx.arc(dotX, dotY, 3, 0, Math.PI * 2);
+  ctx.fill();
 
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      const f = btn.dataset.filter;
-      let visible = 0;
-      cards.forEach(card => {
-        const show = f === 'all' || (card.dataset.tags || '').includes(f);
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
-      });
-      countEl.textContent = visible + ' profil';
+  /* Top vignette */
+  const topVig = ctx.createLinearGradient(0, 0, 0, H * 0.3);
+  topVig.addColorStop(0, 'rgba(0,0,0,0.35)');
+  topVig.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = topVig;
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawAll() {
+  document.querySelectorAll('.portrait-canvas').forEach(drawPortrait);
+}
+
+/* ── Filter ── */
+const filterBtns = document.querySelectorAll('.filter-btn');
+const cards = document.querySelectorAll('.profile-card');
+const countEl = document.getElementById('count');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    const f = btn.dataset.filter;
+    let visible = 0;
+    cards.forEach(card => {
+      const show = f === 'all' || (card.dataset.tags || '').includes(f);
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
     });
+    countEl.textContent = visible + ' profil';
   });
+});
+
+/* ── Init ── */
+window.addEventListener('load', drawAll);
+window.addEventListener('resize', drawAll);
 </script>
 </body>
 </html>

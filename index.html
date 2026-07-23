@@ -292,6 +292,46 @@
   .footer-links a{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
   .footer-links a:hover{color:var(--text);}
 
+  /* ── Mobile card overlay layout ── */
+  .phone-screen .profiles-grid {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .phone-screen .profile-card {
+    overflow: hidden;
+  }
+  .phone-screen .card-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 48px 16px 16px;
+    background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.3) 55%, transparent 100%);
+    border-bottom: none;
+    z-index: 2;
+  }
+  .phone-screen .card-name { color: #F0EDE7; font-size: 1.1rem; }
+  .phone-screen .card-meta { color: rgba(240,237,231,.6); }
+  .phone-screen .tag { color: rgba(240,237,231,.55); border-color: rgba(240,237,231,.18); }
+  .phone-screen .tag.gold { color: var(--gold); border-color: rgba(192,154,94,.45); }
+  .phone-screen .portrait-wrap { aspect-ratio: 3/4; }
+  .phone-screen .featured-card .portrait-wrap { aspect-ratio: 3/4; }
+
+  /* Real mobile (actual device) */
+  @media(max-width:600px) {
+    .profiles-grid { grid-template-columns: 1fr; }
+    .card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 48px 16px 16px;
+      background: linear-gradient(to top, rgba(0,0,0,.82) 0%, rgba(0,0,0,.3) 55%, transparent 100%);
+      border-bottom: none;
+      z-index: 2;
+    }
+    .card-name { color: #F0EDE7; }
+    .card-meta { color: rgba(240,237,231,.6); }
+    .tag { color: rgba(240,237,231,.55); border-color: rgba(240,237,231,.18); }
+    .tag.gold { color: var(--gold); border-color: rgba(192,154,94,.45); }
+  }
+
   /* ── Mobile preview ── */
   .preview-bar{
     position:fixed;bottom:24px;left:50%;transform:translateX(-50%);

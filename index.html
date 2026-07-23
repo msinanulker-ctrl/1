@@ -40,7 +40,8 @@
   /* Nav */
   nav{padding:36px 0 32px;display:flex;align-items:baseline;justify-content:space-between;}
   .logo{font-family:var(--serif);font-size:1.05rem;font-weight:400;letter-spacing:.25em;text-transform:uppercase;}
-  .nav-links{display:flex;gap:36px;list-style:none;align-items:baseline;}
+  .nav-links{display:flex;gap:28px;list-style:none;align-items:baseline;}
+  @media(max-width:600px){.nav-links li:not(:last-child):not(:nth-last-child(2)){display:none;}}
   .nav-links a,.theme-btn{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
   .nav-links a:hover,.theme-btn:hover{color:var(--text);}
   hr{border:none;border-top:.5px solid var(--rule);}
@@ -325,6 +326,9 @@
   <nav>
     <span class="logo">Elara</span>
     <ul class="nav-links">
+      <li><a href="#featured">Profiller</a></li>
+      <li><a href="#vip">VIP</a></li>
+      <li><a href="#hikayeler">Hikayeler</a></li>
       <li><a href="#contact">İletişim</a></li>
       <li><button class="theme-btn" onclick="toggleTheme()">◐</button></li>
     </ul>
@@ -350,7 +354,7 @@
   <div class="featured-grid" id="featured-grid"></div>
 
   <!-- ── VIP ── -->
-  <div class="section-head" style="padding-top:72px;">
+  <div class="section-head" id="vip" style="padding-top:72px;">
     <h2>VIP Profiller</h2>
     <p>Seçkin kadromuz — ayrıcalıklı deneyim için.</p>
   </div>
@@ -367,7 +371,7 @@
   <div class="profiles-grid" id="std-grid"></div>
 
   <!-- ── Blog ── -->
-  <div class="section-head" style="padding-top:72px;">
+  <div class="section-head" id="hikayeler" style="padding-top:72px;">
     <h2>Hikayeler</h2>
     <p>Deneyimler, tavsiyeler ve Elara'dan seçkin anlar.</p>
   </div>

@@ -166,6 +166,52 @@
     margin:0;
   }
 
+  /* ── Blog ── */
+  .blog-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:2px;
+    margin-top:2px;
+  }
+  @media(max-width:700px){.blog-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:440px){.blog-grid{grid-template-columns:1fr;}}
+
+  .blog-card{
+    background:var(--surface);
+    padding:32px 28px 28px;
+    border-bottom:.5px solid var(--rule);
+    display:flex;flex-direction:column;gap:14px;
+    transition:background .2s;
+    cursor:pointer;
+  }
+  .blog-card:hover{background:var(--bg);}
+  .blog-cat{
+    font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);
+  }
+  .blog-title{
+    font-family:var(--serif);
+    font-size:1.05rem;font-weight:400;
+    line-height:1.35;
+    color:var(--text);
+    text-wrap:balance;
+  }
+  .blog-excerpt{
+    font-size:.78rem;color:var(--muted);line-height:1.75;
+    flex:1;
+  }
+  .blog-footer{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:12px;
+    border-top:.5px solid var(--rule);
+  }
+  .blog-date{font-size:.62rem;color:var(--muted);letter-spacing:.08em;}
+  .blog-arrow{
+    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);transition:color .2s;
+  }
+  .blog-card:hover .blog-arrow{color:var(--text);}
+
   /* ── Footer ── */
   footer{padding:40px 0 52px;margin-top:72px;border-top:.5px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
   .footer-left{display:flex;flex-direction:column;gap:5px;}
@@ -434,6 +480,77 @@
         <div class="card-tags"><span class="tag">Özel Akşam</span><span class="tag">Sosyal</span></div>
       </div>
     </div>
+
+  </div>
+
+  <!-- ── Blog ── -->
+  <div class="section-head" style="padding-top:72px;">
+    <h2>Hikayeler</h2>
+    <p>Deneyimler, tavsiyeler ve Elara'dan seçkin anlar.</p>
+  </div>
+  <hr>
+
+  <div class="blog-grid">
+
+    <a href="#" class="blog-card">
+      <span class="blog-cat">Seyahat</span>
+      <p class="blog-title">Cannes'da Bir Hafta: Film Festivali ve Özel Refakat</p>
+      <p class="blog-excerpt">Güney Fransa'nın en prestijli etkinliğinde nasıl bir eşlik deneyimi yaşanır? Sofia'nın gözünden Cannes günlüğü.</p>
+      <div class="blog-footer">
+        <span class="blog-date">12 Temmuz 2026</span>
+        <span class="blog-arrow">Oku →</span>
+      </div>
+    </a>
+
+    <a href="#" class="blog-card">
+      <span class="blog-cat">Rehber</span>
+      <p class="blog-title">İstanbul'un En Seçkin Restoranları: Masa Rezervasyonu ve Protokol</p>
+      <p class="blog-excerpt">Nişantaşı'ndan Bebek'e, şehrin gözde mekanlarında akşam yemeği için bilmeniz gerekenler.</p>
+      <div class="blog-footer">
+        <span class="blog-date">5 Temmuz 2026</span>
+        <span class="blog-arrow">Oku →</span>
+      </div>
+    </a>
+
+    <a href="#" class="blog-card">
+      <span class="blog-cat">VIP</span>
+      <p class="blog-title">Kurumsal Etkinliklerde Refakat: İlk İzlenim Her Şeydir</p>
+      <p class="blog-excerpt">İş dünyasının yüksek profilli daveti için doğru eşlikçiyi seçmek neden kritik öneme sahip?</p>
+      <div class="blog-footer">
+        <span class="blog-date">28 Haziran 2026</span>
+        <span class="blog-arrow">Oku →</span>
+      </div>
+    </a>
+
+    <a href="#" class="blog-card">
+      <span class="blog-cat">Yaşam</span>
+      <p class="blog-title">Gizlilik Bir Lüks Değil, Temel Bir Haktır</p>
+      <p class="blog-excerpt">Elara'nın veri güvenliği ve anonimlik politikası hakkında şeffaf bir değerlendirme.</p>
+      <div class="blog-footer">
+        <span class="blog-date">20 Haziran 2026</span>
+        <span class="blog-arrow">Oku →</span>
+      </div>
+    </a>
+
+    <a href="#" class="blog-card">
+      <span class="blog-cat">Seyahat</span>
+      <p class="blog-title">Dubai, Doha, Abu Dhabi: Körfez Şehirlerinde Refakat Kültürü</p>
+      <p class="blog-excerpt">Farklı kültürlerde refakat etiketi nasıl şekillenir? Körfez seyahatlerinde dikkat edilmesi gerekenler.</p>
+      <div class="blog-footer">
+        <span class="blog-date">14 Haziran 2026</span>
+        <span class="blog-arrow">Oku →</span>
+      </div>
+    </a>
+
+    <a href="#" class="blog-card">
+      <span class="blog-cat">Rehber</span>
+      <p class="blog-title">İlk Buluşmadan Önce: Beklentileri Doğru Yönetmek</p>
+      <p class="blog-excerpt">Hem müşterilerimiz hem de kadromuz için sorunsuz bir ilk deneyim için pratik ipuçları.</p>
+      <div class="blog-footer">
+        <span class="blog-date">8 Haziran 2026</span>
+        <span class="blog-arrow">Oku →</span>
+      </div>
+    </a>
 
   </div>
 

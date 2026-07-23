@@ -222,37 +222,52 @@
     background:var(--surface);
     padding:32px 28px 28px;
     border-bottom:.5px solid var(--rule);
+    border-left:2px solid transparent;
     display:flex;flex-direction:column;gap:14px;
-    transition:background .2s;
+    transition:background .2s, border-color .3s;
     cursor:pointer;
   }
-  .blog-card:hover{background:var(--bg);}
+  .blog-card:hover{
+    background:var(--bg);
+    border-left-color:var(--gold);
+  }
   .blog-cat{
-    font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;
+    font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
     color:var(--gold);
+    display:flex;align-items:center;gap:7px;
+  }
+  .blog-cat::before{
+    content:'';display:inline-block;
+    width:18px;height:.5px;
+    background:var(--gold);opacity:.6;
+    flex-shrink:0;
   }
   .blog-title{
     font-family:var(--serif);
-    font-size:1.05rem;font-weight:400;
+    font-size:1.1rem;font-weight:400;
     line-height:1.35;
     color:var(--text);
     text-wrap:balance;
+    transition:color .2s;
   }
+  .blog-card:hover .blog-title{color:var(--accent);}
   .blog-excerpt{
-    font-size:.78rem;color:var(--muted);line-height:1.75;
+    font-size:.78rem;color:var(--muted);line-height:1.8;
     flex:1;
   }
   .blog-footer{
     display:flex;align-items:center;justify-content:space-between;
-    padding-top:12px;
+    padding-top:14px;
     border-top:.5px solid var(--rule);
+    margin-top:auto;
   }
-  .blog-date{font-size:.62rem;color:var(--muted);letter-spacing:.08em;}
+  .blog-date{font-size:.6rem;color:var(--muted);letter-spacing:.1em;}
   .blog-arrow{
-    font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--muted);transition:color .2s;
+    font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);transition:color .2s, transform .2s;
+    display:flex;align-items:center;gap:5px;
   }
-  .blog-card:hover .blog-arrow{color:var(--text);}
+  .blog-card:hover .blog-arrow{color:var(--text);transform:translateX(3px);}
 
   /* ── Footer ── */
   footer{padding:40px 0 52px;margin-top:72px;border-top:.5px solid var(--rule);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}

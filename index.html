@@ -88,9 +88,23 @@
   .hero-cta:hover svg{transform:translateX(3px);}
 
   /* ── Section headers ── */
-  .section-head{padding:56px 0 32px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  .section-head h2{font-family:var(--serif);font-size:clamp(1.4rem,2.8vw,2rem);font-weight:300;letter-spacing:-.01em;}
-  .section-head p{font-size:.75rem;color:var(--muted);max-width:260px;text-align:right;line-height:1.6;}
+  .section-head{
+    padding:72px 0 28px;
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:16px;flex-wrap:wrap;
+  }
+  .section-head-left{display:flex;flex-direction:column;gap:8px;}
+  .section-eyebrow{
+    font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;
+    color:var(--gold);opacity:.8;
+  }
+  .section-head h2{
+    font-family:var(--serif);
+    font-size:clamp(1.6rem,3vw,2.4rem);
+    font-weight:300;letter-spacing:-.02em;
+    line-height:1;
+  }
+  .section-head p{font-size:.72rem;color:var(--muted);max-width:240px;text-align:right;line-height:1.7;}
   @media(max-width:540px){.section-head p{text-align:left;}}
 
   /* ── Öne Çıkanlar ── */
@@ -363,14 +377,20 @@
 
   <!-- ── Öne Çıkanlar ── -->
   <div class="section-head" id="featured">
-    <h2>Öne Çıkanlar</h2>
+    <div class="section-head-left">
+      <span class="section-eyebrow">Sponsorlu</span>
+      <h2>Öne Çıkanlar</h2>
+    </div>
     <p>Sponsorlu profiller — reklam almak için iletişime geçin.</p>
   </div>
   <div class="featured-grid" id="featured-grid"></div>
 
   <!-- ── VIP ── -->
-  <div class="section-head" id="vip" style="padding-top:72px;">
-    <h2>VIP Profiller</h2>
+  <div class="section-head" id="vip">
+    <div class="section-head-left">
+      <span class="section-eyebrow">Ayrıcalıklı</span>
+      <h2>VIP Profiller</h2>
+    </div>
     <p>Seçkin kadromuz — ayrıcalıklı deneyim için.</p>
   </div>
   <hr class="vip-rule">
@@ -378,16 +398,22 @@
   <div class="profiles-grid" id="vip-grid"></div>
 
   <!-- ── Standart ── -->
-  <div class="section-head" style="padding-top:72px;">
-    <h2>Standart Profiller</h2>
+  <div class="section-head">
+    <div class="section-head-left">
+      <span class="section-eyebrow">Kadro</span>
+      <h2>Standart Profiller</h2>
+    </div>
     <p>Geniş kadromuzdan seçin.</p>
   </div>
   <hr>
   <div class="profiles-grid" id="std-grid"></div>
 
   <!-- ── Blog ── -->
-  <div class="section-head" id="hikayeler" style="padding-top:72px;">
-    <h2>Hikayeler</h2>
+  <div class="section-head" id="hikayeler">
+    <div class="section-head-left">
+      <span class="section-eyebrow">Blog</span>
+      <h2>Hikayeler</h2>
+    </div>
     <p>Deneyimler, tavsiyeler ve Elara'dan seçkin anlar.</p>
   </div>
   <hr>

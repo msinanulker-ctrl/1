@@ -142,9 +142,66 @@
   .footer-links{display:flex;gap:28px;list-style:none;}
   .footer-links a{font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);transition:color .2s;}
   .footer-links a:hover{color:var(--text);}
+
+  /* ── Mobile preview ── */
+  .preview-bar{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    z-index:1000;display:flex;gap:2px;
+    background:var(--surface);
+    border:.5px solid var(--rule);
+    box-shadow:0 4px 24px rgba(0,0,0,.12);
+  }
+  .preview-btn{
+    font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);padding:10px 18px;transition:all .2s;
+    background:transparent;
+  }
+  .preview-btn:hover{color:var(--text);}
+  .preview-btn.on{color:var(--bg);background:var(--text);}
+
+  /* Mobile frame */
+  body.mobile-mode{
+    background:#1A1917;
+    display:flex;flex-direction:column;align-items:center;
+    padding-top:40px;
+  }
+  .phone-shell{
+    display:none;
+    width:393px;
+    background:var(--bg);
+    border-radius:44px;
+    overflow:hidden;
+    box-shadow:0 0 0 10px #2A2825, 0 24px 80px rgba(0,0,0,.6);
+    position:relative;
+    max-height:844px;
+  }
+  .phone-shell::before{
+    content:'';position:absolute;top:14px;left:50%;transform:translateX(-50%);
+    width:120px;height:34px;background:#1A1917;border-radius:20px;z-index:99;
+  }
+  .phone-screen{
+    height:844px;overflow-y:auto;overflow-x:hidden;
+    padding-top:48px;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+  }
+  /* scrollbar hidden inside phone */
+  .phone-screen::-webkit-scrollbar{display:none;}
+
+  body.mobile-mode .phone-shell{display:block;}
+  body.mobile-mode #page-root{display:none;}
 </style>
 </head>
 <body>
+
+<!-- Preview bar -->
+<div class="preview-bar">
+  <button class="preview-btn on"  onclick="setMode('desktop')" id="btn-desktop">Masaüstü</button>
+  <button class="preview-btn"     onclick="setMode('mobile')"  id="btn-mobile">Mobil</button>
+</div>
+
+<!-- Desktop root -->
+<div id="page-root">
 <div class="wrap">
   <nav>
     <span class="logo">Elara</span>
@@ -359,6 +416,14 @@
       <li><a href="#">© 2026</a></li>
     </ul>
   </footer>
+</div><!-- /wrap -->
+</div><!-- /page-root -->
+
+<!-- Phone shell (mobile preview) -->
+<div class="phone-shell" id="phone-shell">
+  <div class="phone-screen" id="phone-screen">
+    <!-- content cloned here by JS -->
+  </div>
 </div>
 
 <script>
@@ -523,15 +588,45 @@ function initCard(card, globalIndex) {
   }, globalIndex * 120);
 }
 
+/* ── Mobile preview toggle ── */
+let mobileCloned = false;
+
+function setMode(mode) {
+  const body = document.body;
+  document.getElementById('btn-desktop').classList.toggle('on', mode === 'desktop');
+  document.getElementById('btn-mobile').classList.toggle('on', mode === 'mobile');
+
+  if (mode === 'mobile') {
+    body.classList.add('mobile-mode');
+    if (!mobileCloned) {
+      // Clone page content into phone screen
+      const src = document.getElementById('page-root');
+      const screen = document.getElementById('phone-screen');
+      const clone = src.cloneNode(true);
+      clone.id = 'page-root-clone';
+      screen.appendChild(clone);
+      mobileCloned = true;
+      // Draw portraits inside clone
+      screen.querySelectorAll('.profile-card').forEach((card, i) => {
+        card.dataset.hue = card.dataset.hue || 0;
+        card.dataset.frames = card.dataset.frames || 3;
+        initCard(card, i + 50); // offset seed so different from desktop
+      });
+    }
+    document.getElementById('phone-shell').style.display = 'block';
+  } else {
+    body.classList.remove('mobile-mode');
+    document.getElementById('phone-shell').style.display = 'none';
+  }
+}
+
 /* ── Boot ── */
 window.addEventListener('load', () => {
-  document.querySelectorAll('.profile-card').forEach((card, i) => initCard(card, i));
+  document.querySelectorAll('#page-root .profile-card').forEach((card, i) => initCard(card, i));
 });
 
 window.addEventListener('resize', () => {
-  document.querySelectorAll('.portrait-canvas').forEach(c => {
-    c.width = 0; // force resize on next redraw
-  });
+  document.querySelectorAll('.portrait-canvas').forEach(c => { c.width = 0; });
   document.querySelectorAll('.profile-card').forEach(c => { if (c._redraw) c._redraw(); });
 });
 </script>

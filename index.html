@@ -45,6 +45,47 @@
   .nav-links a:hover,.theme-btn:hover{color:var(--text);}
   hr{border:none;border-top:.5px solid var(--rule);}
 
+  /* ── Hero ── */
+  .hero{
+    padding: clamp(64px,10vw,120px) 0 clamp(48px,7vw,88px);
+    display:flex;flex-direction:column;gap:28px;
+    border-bottom:.5px solid var(--rule);
+    margin-bottom:0;
+  }
+  .hero-eyebrow{
+    font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--gold);
+  }
+  .hero-title{
+    font-family:var(--serif);
+    font-size:clamp(2.6rem,6vw,4.8rem);
+    font-weight:300;
+    line-height:1.08;
+    letter-spacing:-.02em;
+    max-width:720px;
+    color:var(--text);
+  }
+  .hero-title em{
+    font-style:italic;
+    color:var(--muted);
+  }
+  .hero-body{
+    display:flex;align-items:flex-end;justify-content:space-between;gap:32px;flex-wrap:wrap;
+  }
+  .hero-desc{
+    font-size:.85rem;color:var(--muted);line-height:1.8;max-width:380px;
+  }
+  .hero-cta{
+    display:flex;align-items:center;gap:10px;flex-shrink:0;
+    font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--text);padding-bottom:2px;
+    border-bottom:.5px solid currentColor;
+    transition:color .2s;
+  }
+  .hero-cta:hover{color:var(--gold);}
+  .hero-cta svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;transition:transform .2s;}
+  .hero-cta:hover svg{transform:translateX(3px);}
+
   /* ── Section headers ── */
   .section-head{padding:56px 0 32px;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
   .section-head h2{font-family:var(--serif);font-size:clamp(1.4rem,2.8vw,2rem);font-weight:300;letter-spacing:-.01em;}
@@ -291,10 +332,18 @@
 </div>
 
 <div class="wrap">
-  <hr>
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <span class="hero-eyebrow">İstanbul · Ankara · İzmir</span>
+    <h1 class="hero-title">Seçkin refakat,<br><em>her ortama uygun</em><br>bir dokunuş.</h1>
+    <div class="hero-body">
+      <p class="hero-desc">Kurumsal etkinliklerden özel akşam yemeklerine, yurt içi seyahatten uluslararası programlara kadar — Elara kadrosu her bağlamda temsil gücü sunar.</p>
+      <a href="#featured" class="hero-cta">Profilleri Keşfet <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    </div>
+  </section>
 
   <!-- ── Öne Çıkanlar ── -->
-  <div class="section-head">
+  <div class="section-head" id="featured">
     <h2>Öne Çıkanlar</h2>
     <p>Sponsorlu profiller — reklam almak için iletişime geçin.</p>
   </div>
